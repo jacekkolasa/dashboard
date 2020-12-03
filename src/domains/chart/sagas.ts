@@ -137,7 +137,7 @@ function* fetchDataSaga({ payload }: Action<FetchDataPayload>) {
       group,
       gtime,
       agent_options: options.split("|"),
-      aggregations: [groupBy === "node" && {
+      aggregations: [groupBy && groupBy !== "dimension" && {
         method: dimensionsAggrMethod,
         groupBy: ["chart", "node"],
       },

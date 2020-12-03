@@ -90,7 +90,7 @@ export interface StaticAttributes {
   unitsDesired?: string
   aggrMethod?: string
   dimensionsAggrMethod?: string
-  groupBy?: "node" | "dimension"
+  groupBy?: string
   nodeIDs?: string[]
   colors?: string
   commonColors?: string

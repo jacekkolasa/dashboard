@@ -35,6 +35,7 @@ interface SubSectionProps {
   menuName: string
   pcentWidth: number
   renderCustomElementForDygraph?: RenderCustomElementForDygraph
+  renderBeforeCharts?: any
   shouldDisplayHeadMain: boolean
   commonAttributesOverrides?: Partial<Attributes>
   attributesOverrides?: ChartsAttributes
@@ -43,6 +44,7 @@ interface SubSectionProps {
 
 const emptyNodeIDs: string[] = []
 const noop = () => {}
+const stubNull = () => null
 
 const SubSection = memo(({
   chartsMetadata,
@@ -53,16 +55,23 @@ const SubSection = memo(({
   menuName,
   pcentWidth,
   renderCustomElementForDygraph,
+  renderBeforeCharts,
   shouldDisplayHeadMain,
   attributesOverrides,
   commonAttributesOverrides,
   nodeIDs = emptyNodeIDs,
 }: SubSectionProps) => {
   const submenuNames = sortObjectByPriority(menu.submenus)
+
+  const chartIds = submenuNames
+    .flatMap((name: string) => menu.submenus[name].charts)
+    .map((chart: any) => chart.id)
+
   return (
     <div role="region" className="dashboard-subsection">
       {/* eslint-disable-next-line react/no-danger */}
       <span dangerouslySetInnerHTML={{ __html: menu.info }} />
+      {renderBeforeCharts({ chartIds })}
       <div className="netdata-chart-row">
         {shouldDisplayHeadMain && (
           <HeadMain
@@ -122,6 +131,7 @@ interface Props {
   dropdownMenu?: DropdownMenu
   host?: string
   renderCustomElementForDygraph?: RenderCustomElementForDygraph
+  renderBeforeCharts?: any
   scrollableContainerRef: React.RefObject<HTMLDivElement>
   timeWindow?: number
   attributes?: ChartsAttributes
@@ -138,6 +148,7 @@ export const NodeView = ({
   dropdownMenu,
   host = "http://localhost:19999",
   renderCustomElementForDygraph,
+  renderBeforeCharts = stubNull,
   scrollableContainerRef,
   timeWindow,
   attributes,
@@ -222,6 +233,7 @@ export const NodeView = ({
                 </div>
                 <SubSection
                   renderCustomElementForDygraph={renderCustomElementForDygraph}
+                  renderBeforeCharts={renderBeforeCharts}
                   duration={duration}
                   dropdownMenu={dropdownMenu}
                   menu={menu}

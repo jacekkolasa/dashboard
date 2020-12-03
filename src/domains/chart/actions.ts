@@ -11,7 +11,7 @@ export interface UpdateChartDataAction {
   id: string
 }
 export const updateChartDataAction = createAction<UpdateChartDataAction>(
-  `${storeKey}/updateChartData`,
+  `${storeKey}/updateChartData`
 )
 
 export interface UpdateChartMetadataAction {
@@ -19,7 +19,7 @@ export interface UpdateChartMetadataAction {
   id: string
 }
 export const updateChartMetadataAction = createAction<UpdateChartMetadataAction>(
-  `${storeKey}/updateChartMetadata`,
+  `${storeKey}/updateChartMetadata`
 )
 
 export interface FetchDataParams {
@@ -42,23 +42,24 @@ export interface FetchDataUrlParams {
   dimensionsAggrMethod?: string
   nodeIDs?: string[]
   httpMethod?: Method
-  groupBy?: "node" | "dimension"
+  groupBy?: string
 }
 export interface FetchDataPayload extends FetchDataUrlParams {
-  id: string,
+  id: string
   fetchDataParams: FetchDataParams
   cancelTokenSource: CancelTokenSource
 }
 
 export const fetchDataAction = createRequestAction<
   FetchDataPayload,
-  { id: string, chartData: ChartData, fetchDataParams: FetchDataParams }
+  { id: string; chartData: ChartData; fetchDataParams: FetchDataParams }
 >(`${storeKey}/fetchDataAction`)
 
-
-export interface FetchDataCancelAction { id: string }
+export interface FetchDataCancelAction {
+  id: string
+}
 export const fetchDataCancelAction = createAction<FetchDataCancelAction>(
-  `${storeKey}/fetchDataCancelAction`,
+  `${storeKey}/fetchDataCancelAction`
 )
 
 export interface FetchDataForSnapshotPayload extends FetchDataUrlParams {
@@ -67,11 +68,11 @@ export interface FetchDataForSnapshotPayload extends FetchDataUrlParams {
 }
 export const fetchDataForSnapshotAction = createRequestAction<
   FetchDataForSnapshotPayload,
-  { id: string, snapshotData: ChartData }
+  { id: string; snapshotData: ChartData }
 >(`${storeKey}/fetchDataForSnapshotAction`)
 
 export const snapshotExportResetAction = createRequestAction(
-  `${storeKey}/snapshotExportResetAction`,
+  `${storeKey}/snapshotExportResetAction`
 )
 
 export interface FetchChartPayload {
@@ -83,16 +84,15 @@ export interface FetchChartPayload {
 
 export const fetchChartAction = createRequestAction<
   FetchChartPayload,
-  { chartMetadata: ChartMetadata, id: string }
+  { chartMetadata: ChartMetadata; id: string }
 >(`${storeKey}/fetchChartAction`)
-
 
 export interface SetResizeHeightAction {
   id: string
   resizeHeight: number
 }
 export const setResizeHeightAction = createAction<SetResizeHeightAction>(
-  `${storeKey}/setResizeHeight`,
+  `${storeKey}/setResizeHeight`
 )
 
 export interface SetChartPanAndZoomAction {
@@ -102,15 +102,15 @@ export interface SetChartPanAndZoomAction {
   shouldForceTimeRange?: boolean
 }
 export const setChartPanAndZoomAction = createAction<SetChartPanAndZoomAction>(
-  `${storeKey}/setChartPanAndZoom`,
+  `${storeKey}/setChartPanAndZoom`
 )
 
 export const resetChartPanAndZoomAction = createAction<{ id: string }>(
-  `${storeKey}/resetChartPanAndZoomAction`,
+  `${storeKey}/resetChartPanAndZoomAction`
 )
 
 export const clearChartStateAction = createAction<{ id: string }>(
-  `${storeKey}/clearChartStateAction`,
+  `${storeKey}/clearChartStateAction`
 )
 
 export interface FetchInfoPayload {
@@ -122,7 +122,6 @@ export interface FetchInfoSuccessPayload {
   isAgentClaimed: boolean
   isACLKAvailable: boolean
 }
-export const fetchInfoAction = createRequestAction<
-  FetchInfoPayload,
-  FetchInfoSuccessPayload
->(`${storeKey}/fetchInfoAction`)
+export const fetchInfoAction = createRequestAction<FetchInfoPayload, FetchInfoSuccessPayload>(
+  `${storeKey}/fetchInfoAction`
+)
