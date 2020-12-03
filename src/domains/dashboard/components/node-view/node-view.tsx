@@ -19,6 +19,7 @@ import { ChartWrapper } from "../chart-wrapper"
 import { renderSubmenuName } from "./render-submenu-name"
 import { generateHeadCharts } from "./generate-head-charts"
 import { useUpdateTheme } from "./use-update-theme"
+import SectionOverview from "./section-overview"
 import "dashboard_info"
 import "./node-view.scss"
 
@@ -65,7 +66,9 @@ const SubSection = memo(({
 
   const chartIds = submenuNames
     .flatMap((name: string) => menu.submenus[name].charts)
-    .map((chart: any) => chart.id)
+    .map((chart: any) => chart.id) as string[]
+
+  const isSectionOverviewVisible = chartIds[0].startsWith("mem.")
 
   return (
     <div role="region" className="dashboard-subsection">
@@ -83,6 +86,9 @@ const SubSection = memo(({
             commonAttributesOverrides={commonAttributesOverrides}
           />
         )}
+        {isSectionOverviewVisible &&
+          <SectionOverview />
+        }
         {submenuNames.flatMap(
           (submenu) => menu.submenus[submenu].charts
             .concat().sort(prioritySort) // shallow clone, sort by priority
