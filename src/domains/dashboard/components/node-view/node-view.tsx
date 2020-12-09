@@ -36,13 +36,15 @@ interface SubSectionProps {
   menuName: string
   pcentWidth: number
   renderCustomElementForDygraph?: RenderCustomElementForDygraph
+  onAttributesChange: any
   renderBeforeCharts?: any
   shouldDisplayHeadMain: boolean
   commonAttributesOverrides?: Partial<Attributes>
-  attributesOverrides?: ChartsAttributes
+  attributesOverrides: ChartsAttributes
   nodeIDs?: string[]
 }
 
+const emptyObject = {} as any
 const emptyNodeIDs: string[] = []
 const noop = () => {}
 const stubNull = () => null
@@ -56,6 +58,7 @@ const SubSection = memo(({
   menuName,
   pcentWidth,
   renderCustomElementForDygraph,
+  onAttributesChange,
   renderBeforeCharts,
   shouldDisplayHeadMain,
   attributesOverrides,
@@ -74,7 +77,7 @@ const SubSection = memo(({
     <div role="region" className="dashboard-subsection">
       {/* eslint-disable-next-line react/no-danger */}
       <span dangerouslySetInnerHTML={{ __html: menu.info }} />
-      {renderBeforeCharts({ chartIds })}
+      {renderBeforeCharts({ chartIds, chartsAttributes: attributesOverrides, chartsMetadata, onAttributesChange })}
       <div className="netdata-chart-row">
         {shouldDisplayHeadMain && (
           <HeadMain
@@ -104,7 +107,13 @@ const SubSection = memo(({
                     host,
                     nodeIDs,
                     ...commonAttributesOverrides,
+                    ...attributesOverrides[attributes.id],
                   }
+                }
+                onAttributesChange={
+                  (value: any) => onAttributesChange(
+                    { ...attributesOverrides, [attributes.id]: value },
+                  )
                 }
                 key={`${attributes.id}-${attributes.dimensions}`}
                 chartMetadata={chartsMetadata.charts[attributes.id]}
@@ -115,6 +124,7 @@ const SubSection = memo(({
       {submenuNames.map(renderSubmenuName({
         chartsMetadata,
         renderCustomElementForDygraph,
+        onAttributesChange,
         dropdownMenu,
         duration,
         host,
@@ -137,6 +147,7 @@ interface Props {
   dropdownMenu?: DropdownMenu
   host?: string
   renderCustomElementForDygraph?: RenderCustomElementForDygraph
+  onAttributesChange?: any
   renderBeforeCharts?: any
   scrollableContainerRef: React.RefObject<HTMLDivElement>
   timeWindow?: number
@@ -154,10 +165,11 @@ export const NodeView = ({
   dropdownMenu,
   host = "http://localhost:19999",
   renderCustomElementForDygraph,
+  onAttributesChange,
   renderBeforeCharts = stubNull,
   scrollableContainerRef,
   timeWindow,
-  attributes,
+  attributes = emptyObject,
   commonAttributesOverrides,
   metricsCorrelationMetadata,
   children,
@@ -239,6 +251,7 @@ export const NodeView = ({
                 </div>
                 <SubSection
                   renderCustomElementForDygraph={renderCustomElementForDygraph}
+                  onAttributesChange={onAttributesChange}
                   renderBeforeCharts={renderBeforeCharts}
                   duration={duration}
                   dropdownMenu={dropdownMenu}
